@@ -1,0 +1,23 @@
+﻿@model KanbanMVC.Models.Board
+
+<section class="col-sm-9 col-lg-10 board-container bg-dark4 fix-margin-padding">
+    <div class="row bg-dark1 board-name-h fix-margin-padding">
+        <h2 class="inline is-visible">@Model.Title</h2>
+        <form class="is-hidden" action="@Url.Action("UpdateBoard", new {id = Model.Id})" method="post">
+            <input type="text" name="title" required minlength="1" maxlength="50" size="20">
+        </form>
+        <span onclick="editBoard()" class="is-visible btn btn-default not-rounded glyphicon glyphicon-pencil"></span>
+        <span onclick="divNewColumn()" class="is-visible btn btn-default not-rounded glyphicon glyphicon-plus"></span>
+        <a href="@Url.Action("DeleteBoard", new {id = Model.Id})"><span class="is-hidden btn btn-default not-rounded glyphicon glyphicon-trash"></span></a>
+        <span onclick="submitFormBoard()" class="is-hidden btn btn-default not-rounded glyphicon glyphicon-ok"></span>
+    </div>
+
+    <div class="is-hidden row bg-dark2 new-column fix-margin-padding">
+        <form action="@Url.Action("CreateColumn", "Column", new {boardId = Model.Id})" method="post">
+            <input type="text" name="title" required minlength="1" maxlength="50" size="20">
+        </form>
+        <span onclick="submitFormNewColumn()" class="btn btn-default not-rounded glyphicon glyphicon-ok"></span>
+    </div>
+
+    @{Html.RenderAction("GetColumnList", "Column", new {boardId = Model.Id });}
+</section>

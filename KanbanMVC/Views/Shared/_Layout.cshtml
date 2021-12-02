@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - KanbanMVC</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="bg-dark4 fix-margin-padding">
+    <div class="container-fluid fix-margin-padding">
+        <div class="col-md-12 fix-margin-padding">
+            <nav class="row custom-navbar bg-dark0 fix-margin-padding">
+                <h1>@Html.ActionLink("Kanban MVC", "Index", "Board")</h1>
+            </nav>
+
+            <div class="row fix-margin-padding">
+                @RenderBody()
+            </div>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/site")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

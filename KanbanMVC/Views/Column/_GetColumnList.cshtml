@@ -1,0 +1,31 @@
+﻿@model List<KanbanMVC.Models.Column>
+
+<ul class="row bg-dark4 column-list fix-margin-padding">
+    @foreach (var item in Model)
+    {
+    <li class="col-sm-4 col-lg-3 bg-dark2 fix-margin-padding column-@item.Id">
+        <div class="row bg-dark2 column-name fix-margin-padding border-dark3 no-border-left">
+            <h3 class="is-visible inline">@item.Title</h3>
+            <form class="is-hidden" action="@Url.Action("UpdateColumn", new {id = item.Id})" method="post">
+                <input type="text" name="title" required minlength="1" maxlength="50" size="10">
+            </form>
+            <span onclick="editColumn(@item.Id)" class="is-visible btn btn-default not-rounded glyphicon glyphicon-pencil"></span>
+            <span onclick="formNewNote(@item.Id)" class="is-visible btn btn-default not-rounded glyphicon glyphicon-plus"></span>
+            <a href="@Url.Action("DeleteColumn", new {id = item.Id})"><span class="is-hidden btn btn-default not-rounded glyphicon glyphicon-trash"></span></a>
+            <span onclick="submitFormColumn(@item.Id)" class="is-hidden btn btn-default not-rounded glyphicon glyphicon-ok"></span>
+        </div>
+
+        <form class="is-hidden new-note-form" action="@Url.Action("CreateNote", "Note", new {columnId = item.Id})" method="post">
+            <div class="row bg-yellow0 new-note-title fix-margin-padding">
+                <input type="text" name="title" required minlength="1" maxlength="50" size="10">
+                <span onclick="submitFormNewNote(@item.Id)" class="btn btn-default black not-rounded glyphicon glyphicon-ok"></span>
+            </div>
+            <div class="row bg-yellow1 new-note-text fix-margin-padding">
+                <textarea name="text" required minlength="1" maxlength="500" cols="30" rows="10"></textarea>
+            </div>
+        </form>
+
+        @{Html.RenderAction("GetNoteList", "Note", new { columnId = item.Id });}
+    </li>
+    }
+</ul>

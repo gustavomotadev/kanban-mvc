@@ -1,0 +1,11 @@
+﻿@model KanbanMVC.Models.Board
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<!-- board list -->
+@{Html.RenderAction("GetBoardList");}
+
+<!-- selected board -->
+@{Html.RenderAction("GetBoard");}

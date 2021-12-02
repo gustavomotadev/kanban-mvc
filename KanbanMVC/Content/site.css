@@ -1,0 +1,172 @@
+﻿.custom-navbar {
+    display: flex;
+    align-items: center;
+    width: 100vw;
+}
+
+.bg-dark0 {
+    background-color: #444;
+    color: #fff;
+}
+
+.bg-dark1 {
+    background-color: #555;
+    color: #fff;
+}
+
+.bg-dark2 {
+    background-color: #666;
+    color: #fff;
+}
+
+.bg-dark3 {
+    background-color: #777;
+    color: #fff;
+}
+
+.bg-dark4 {
+    background-color: #888;
+    color: #fff;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    padding: 1rem 2rem;
+}
+
+h2 {
+    margin: 0;
+    font-size: 2rem;
+    padding: 1rem 2rem;
+}
+
+h2.inline {
+    display: inline;
+}
+
+.glyphicon {
+    font-size: 2.5rem;
+}
+
+.fix-margin-padding {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.boards-header, .column-name, .note-name, .board-name-h, .new-note-title, .note-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boards-header h2, .board-name-h h2, .column-name h3, .note-name h4 {
+    margin: 0 auto 0 0;
+}
+
+.boards-header form, .board-name-h form, .column-name form, .note-name form, .new-column form, .new-note-title input, .note-name input {
+    margin: auto auto auto 2rem;
+    color: #000;
+}
+
+.not-rounded {
+    border-radius: 0;
+}
+
+h3 {
+    margin: 0;
+    font-size: 2rem;
+    padding: 1rem 2rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a, a:hover, a:link, a:visited, a:active {
+    text-decoration: none;
+    color: unset;
+}
+
+.btn.btn-default {
+    background-color: unset;
+    color: #fff;
+    border-width: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.btn.btn-default:hover {
+    background-color: rgba(255,255,255,0.5);
+    color: #fff;
+}
+
+.border-dark3 {
+    border: 2px solid #777;
+}
+
+.board-container .boards-header, .board-name-h {
+    padding-top: 2px;
+}
+
+h1, h2, h3, h4 {
+    line-height: unset;
+}
+
+.no-border-left {
+    border-left: unset;
+}
+
+.bg-yellow0 {
+    background-color: #fc4;
+    color: #000;
+}
+
+.bg-yellow1 {
+    background-color: #fd8;
+    color: #000;
+}
+
+h4 {
+    margin: 0;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+}
+
+.note-name, .new-note-title {
+    margin-right: 4px;
+}
+
+.note-text, .new-note-text {
+    padding: 1.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
+.black {
+    color: #000;
+}
+
+.btn.btn-default.black {
+    color: #000;
+}
+
+.new-note-text, .note-text {
+    display: flex;
+    justify-content: center;
+}
+
+.new-note-text textarea, .note-text textarea {
+    margin: 1rem 0;
+}
+
+textarea {
+    padding: 0.5rem;
+}
+
+input {
+    padding: 0.25rem 0.5rem;
+}

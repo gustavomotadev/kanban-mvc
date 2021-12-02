@@ -1,0 +1,20 @@
+﻿@model List<KanbanMVC.Models.Board>
+
+<section class="col-sm-3 col-lg-2 board-select bg-dark3 fix-margin-padding border-dark3">
+    <div class="row bg-dark1 boards-header fix-margin-padding">
+        <h2 class="inline is-visible">@Html.ActionLink("Boards", "Index")</h2>
+        <form class="is-hidden" action="@Url.Action("CreateBoard")" method="post">
+            <input type="text" name="title" required minlength="1" maxlength="50" size="10">
+        </form>
+        <span onclick="editNewBoard()" class="is-visible btn btn-default not-rounded glyphicon glyphicon-plus"></span>
+        <span onclick="submitFormNewBoard()" class="is-hidden btn btn-default not-rounded glyphicon glyphicon-ok"></span>
+    </div>
+    <ul class="board-list fix-margin-padding">
+        @foreach (var item in Model)
+        {
+            <li class="row bg-dark2 board-name fix-margin-padding">
+                <h3>@Html.ActionLink(item.Title, "DisplayBoard", new { id = item.Id })</h3>
+            </li>
+        }
+    </ul>
+</section>
