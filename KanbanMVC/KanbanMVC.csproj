@@ -123,6 +123,10 @@
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\ColumnController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
+    <Compile Include="DAL\BoardManagement.cs" />
+    <Compile Include="DAL\ColumnManagement.cs" />
+    <Compile Include="DAL\DataBaseHelper.cs" />
+    <Compile Include="DAL\NoteManagement.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

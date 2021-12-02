@@ -1,4 +1,5 @@
-﻿using KanbanMVC.Models;
+﻿using KanbanMVC.DAL;
+using KanbanMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,61 +9,116 @@ namespace KanbanMVC.Repository
 {
     public class EntityRepository
     {
-        public static List<Board> Boards { get; set; } =
-            new List<Board>
-            {
-                new Board() {Id = 1, Title = "Project ABC"},
-                new Board() {Id = 2, Title = "Project DEF"},
-                new Board() {Id = 3, Title = "Project GHI"}
-            };
+        public static List<Board> Boards { get; set; } = new List<Board>();
 
-        public static List<Column> Columns { get; set; } =
-            new List<Column>
-            {
-                new Column() {Id = 1, BoardId = 1, Title = "Backlog"},
-                new Column() {Id = 2, BoardId = 1, Title = "Development"},
-                new Column() {Id = 3, BoardId = 1, Title = "Done"}
-            };
+        public static List<Column> Columns { get; set; } = new List<Column>();
 
-        public static List<Note> Notes { get; set; } =
-            new List<Note>
-            {
-                new Note() {Id = 1, ColumnId = 1, Title = "Fix Bug #1", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."},
-                new Note() {Id = 2, ColumnId = 1, Title = "UX", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."},
-                new Note() {Id = 3, ColumnId = 1, Title = "Unit Tests", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."},
-                new Note() {Id = 4, ColumnId = 2, Title = "Views", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."},
-                new Note() {Id = 5, ColumnId = 2, Title = "Controllers", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."},
-                new Note() {Id = 6, ColumnId = 3, Title = "Models", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis."}
-            };
+        public static List<Note> Notes { get; set; } = new List<Note>();
 
-        public static void DeleteBoard(int id)
+        public static void FillTestData()
         {
-            var board = Boards.SingleOrDefault(b => b.Id == id);
-            var board_columns = Columns.Where(c => c.BoardId == id);
+            Boards.Add(new Board() { Id = 1, Title = "Project ABC" });
+            Boards.Add(new Board() { Id = 2, Title = "Project DEF" });
+            Boards.Add(new Board() { Id = 3, Title = "Project GHI" });
+            Columns.Add(new Column() { Id = 1, BoardId = 1, Title = "Backlog" });
+            Columns.Add(new Column() { Id = 2, BoardId = 1, Title = "Development" });
+            Columns.Add(new Column() { Id = 3, BoardId = 1, Title = "Done" });
+            Notes.Add(new Note() { Id = 1, ColumnId = 1, Title = "Fix Bug #1", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+            Notes.Add(new Note() { Id = 2, ColumnId = 1, Title = "UX", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+            Notes.Add(new Note() { Id = 3, ColumnId = 1, Title = "Unit Tests", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+            Notes.Add(new Note() { Id = 4, ColumnId = 2, Title = "Views", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+            Notes.Add(new Note() { Id = 5, ColumnId = 2, Title = "Controllers", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+            Notes.Add(new Note() { Id = 6, ColumnId = 3, Title = "Models", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed ullamcorper ligula. Vestibulum et volutpat ipsum. Nunc rhoncus tristique venenatis." });
+        }
 
-            foreach (var column in board_columns)
+        public static void FillRepository()
+        {
+            FillTestData();
+            ReadAllBoards();
+        }
+
+        /* BOARD */
+
+        public static int DeleteBoard(int id)
+        {
+            var affected = BoardManagement.DeleteBoard(id);
+
+            if (affected > 0)
             {
-                Notes.RemoveAll(n => n.ColumnId == column.Id);
+                var board = Boards.SingleOrDefault(b => b.Id == id);
+                var board_columns = Columns.Where(c => c.BoardId == id);
+
+                foreach (var column in board_columns)
+                {
+                    Notes.RemoveAll(n => n.ColumnId == column.Id);
+                }
+                Columns.RemoveAll(c => c.BoardId == id);
+                Boards.Remove(board);
             }
-            Columns.RemoveAll(c => c.BoardId == id);
-            Boards.Remove(board);
+
+            return affected;
         }
 
-        public static void UpdateBoard(int id, string title)
+        public static int UpdateBoard(int id, string title)
         {
-            var board = Boards.SingleOrDefault(b => b.Id == id);
+            var affected = BoardManagement.UpdateBoard(id, title);
 
-            board.Title = title;
+            if (affected > 0) Boards.SingleOrDefault(b => b.Id == id).Title = title;
+
+            return affected;
         }
 
-        public static int CreateBoard(string title)
+        public static int? CreateBoard(string title)
         {
-            var id = Boards.Max(b => b.Id) + 1;
+            var id = BoardManagement.CreateBoard(title);
 
-            Boards.Add(new Board() {Id=id, Title=title});
+            if (id != null) Boards.Add(new Board() { Id = (int) id, Title = title });
 
             return id;
         }
+
+        public static Board GetBoard(int id)
+        {
+            return Boards.SingleOrDefault(b => b.Id == id);
+        }
+
+        public static List<Board> GetAllBoards()
+        {
+            return Boards;
+        }
+
+        public static Board ReadBoard(int id)
+        {
+            var boardDB = BoardManagement.ReadBoard(id);
+
+            var boardRepo = Boards.FirstOrDefault(b => b.Id == id);
+            if (boardRepo != null)
+            {
+                boardRepo.Title = boardDB.Title;
+            }
+            else Boards.Add(new Board() { Id = boardDB.Id, Title = boardDB.Title });
+
+            return boardDB;
+        }
+
+        public static List<Board> ReadAllBoards()
+        {
+            var boardsDB = BoardManagement.ReadAllBoards();
+
+            foreach (var boardDB in boardsDB)
+            {
+                var boardRepo = Boards.FirstOrDefault(b => b.Id == boardDB.Id);
+                if (boardRepo != null)
+                {
+                    boardRepo.Title = boardDB.Title;
+                }
+                else Boards.Add(new Board() { Id = boardDB.Id, Title = boardDB.Title });
+            }
+
+            return Boards;
+        }
+
+        /* COLUMN */
 
         public static int CreateColumn(int boardId, string title)
         {
@@ -92,6 +148,8 @@ namespace KanbanMVC.Repository
 
             column.Title = title;
         }
+
+        /* NOTE */
 
         public static int CreateNote(int columnId, string title, string text)
         {
