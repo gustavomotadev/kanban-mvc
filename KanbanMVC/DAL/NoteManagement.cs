@@ -14,7 +14,7 @@ namespace KanbanMVC.DAL
             return (int?)DataBaseHelper.ExecuteScalarQuery(insertQuery);
         }
 
-        public static int UpdateColumn(int id, string title, string text)
+        public static int UpdateNote(int id, string title, string text)
         {
             string updateQuery = $"UPDATE [dbo].[Note] SET [Title] = '{title}', [Text] = '{text}' WHERE Id = {id} SELECT @@ROWCOUNT";
 
@@ -23,7 +23,7 @@ namespace KanbanMVC.DAL
             return (result == null) ? 0 : (int)result;
         }
 
-        public static int DeleteBoard(int id)
+        public static int DeleteNote(int id)
         {
             string deleteQuery = $"DELETE FROM [dbo].[Note] WHERE Id = {id} SELECT @@ROWCOUNT";
 
@@ -32,7 +32,7 @@ namespace KanbanMVC.DAL
             return (result == null) ? 0 : (int)result;
         }
 
-        public static dynamic ReadBoard(int id)
+        public static dynamic ReadNote(int id)
         {
             string readQuery = $"SELECT * FROM [dbo].[Note] WHERE Id = {id}";
 
@@ -58,9 +58,36 @@ namespace KanbanMVC.DAL
             return result;
         }
 
-        public static List<dynamic> ReadAllBoards()
+        public static List<dynamic> ReadAllNotes()
         {
             string readQuery = $"SELECT * FROM [dbo].[Note]";
+
+            var dataReader = DataBaseHelper.ExecuteReaderQuery(readQuery);
+
+            var result = new List<dynamic>();
+
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    result.Add(new
+                    {
+                        Id = Convert.ToInt32(dataReader["Id"]),
+                        Title = dataReader["Title"].ToString(),
+                        Text = dataReader["Text"].ToString(),
+                        ColumnId = Convert.ToInt32(dataReader["ColumnId"])
+                    });
+                }
+            }
+
+            dataReader.Dispose();
+
+            return result;
+        }
+
+        public static List<dynamic> ReadNotesInColumn(int columnId)
+        {
+            string readQuery = $"SELECT * FROM [dbo].[Note] WHERE ColumnId = {columnId}";
 
             var dataReader = DataBaseHelper.ExecuteReaderQuery(readQuery);
 

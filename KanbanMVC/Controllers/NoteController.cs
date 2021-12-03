@@ -12,7 +12,7 @@ namespace KanbanMVC.Controllers
         [HttpGet]
         public ActionResult GetNoteList(int columnId)
         {
-            var notes = EntityRepository.Notes.Where(c => c.ColumnId == columnId).ToList();
+            var notes = NoteRepository.ReadNotesInColumn(columnId);
 
             return PartialView("_GetNoteList", notes);
         }
@@ -20,34 +20,39 @@ namespace KanbanMVC.Controllers
         [HttpPost]
         public ActionResult CreateNote(int columnId, string title, string text)
         {
-            var boardId = EntityRepository.Columns.SingleOrDefault(c => c.Id == columnId).BoardId;
+            var id = NoteRepository.CreateNote(columnId, title, text);
+            var boardId = ColumnRepository.ReadColumn(columnId)?.BoardId;
 
-            var id = EntityRepository.CreateNote(columnId, title, text);
-
-            if (id != -1) return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            if (id != null && boardId != null) return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
             else return RedirectToAction("Index", "Board");
         }
 
         [HttpGet]
         public ActionResult DeleteNote(int id)
         {
-            var columnId = EntityRepository.Notes.SingleOrDefault(n => n.Id == id).ColumnId;
-            var boardId = EntityRepository.Columns.SingleOrDefault(c => c.Id == columnId).BoardId;
+            var columnId = NoteRepository.ReadNote(id)?.ColumnId;
+            var boardId = (columnId != null) ? ColumnRepository.ReadColumn((int) columnId)?.BoardId : null;
 
-            EntityRepository.DeleteNote(id);
-
-            return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            if (boardId != null)
+            {
+                NoteRepository.DeleteNote(id);
+                return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            }
+            else return RedirectToAction("Index", "Board");
         }
 
         [HttpPost]
         public ActionResult UpdateNote(int id, string title, string text)
         {
-            var columnId = EntityRepository.Notes.SingleOrDefault(n => n.Id == id).ColumnId;
-            var boardId = EntityRepository.Columns.SingleOrDefault(c => c.Id == columnId).BoardId;
+            var columnId = NoteRepository.ReadNote(id)?.ColumnId;
+            var boardId = (columnId != null) ? ColumnRepository.ReadColumn((int)columnId)?.BoardId : null;
 
-            EntityRepository.UpdateNote(id, title, text);
-
-            return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            if (boardId != null)
+            {
+                NoteRepository.UpdateNote(id, title, text);
+                return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            }
+            else return RedirectToAction("Index", "Board");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace KanbanMVC
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            EntityRepository.FillRepository();
+            //EntityRepository.FillRepository();
         }
     }
 }

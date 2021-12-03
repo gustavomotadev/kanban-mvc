@@ -19,13 +19,13 @@ namespace KanbanMVC.Controllers
         [HttpGet]
         public ActionResult GetBoardList()
         {
-            return PartialView("_GetBoardList", EntityRepository.Boards);
+            return PartialView("_GetBoardList", BoardRepository.ReadAllBoards());
         }
 
         [HttpGet]
         public ActionResult GetBoard(int id)
         {
-            var board = EntityRepository.GetBoard(id);
+            var board = BoardRepository.ReadBoard(id);
 
             return PartialView("_GetBoard", board);
         }
@@ -33,7 +33,7 @@ namespace KanbanMVC.Controllers
         [HttpGet]
         public ActionResult DisplayBoard(int id)
         {
-            var board = EntityRepository.GetBoard(id);
+            var board = BoardRepository.ReadBoard(id);
 
             return View(board);
         }
@@ -41,7 +41,7 @@ namespace KanbanMVC.Controllers
         [HttpGet]
         public ActionResult DeleteBoard(int id)
         {
-            var affected = EntityRepository.DeleteBoard(id);
+            var affected = BoardRepository.DeleteBoard(id);
 
             return RedirectToAction("Index");
         }
@@ -49,7 +49,7 @@ namespace KanbanMVC.Controllers
         [HttpPost]
         public ActionResult UpdateBoard(int id, string title)
         {
-            var affected = EntityRepository.UpdateBoard(id, title);
+            var affected = BoardRepository.UpdateBoard(id, title);
 
             if (affected > 0) return RedirectToAction("DisplayBoard", new {id});
             else return RedirectToAction("Index");
@@ -58,7 +58,7 @@ namespace KanbanMVC.Controllers
         [HttpPost]
         public ActionResult CreateBoard(string title)
         {
-            var id = EntityRepository.CreateBoard(title);
+            var id = BoardRepository.CreateBoard(title);
 
             if (id != null) return RedirectToAction("DisplayBoard", new { id });
             else return RedirectToAction("Index");

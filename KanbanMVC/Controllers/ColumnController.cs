@@ -12,7 +12,7 @@ namespace KanbanMVC.Controllers
         [HttpGet]
         public ActionResult GetColumnList(int boardId)
         {
-            var columns = EntityRepository.Columns.Where(c => c.BoardId == boardId).ToList();
+            var columns = ColumnRepository.ReadColumnsInBoard(boardId);
 
             return PartialView("_GetColumnList", columns);
         }
@@ -20,30 +20,39 @@ namespace KanbanMVC.Controllers
         [HttpPost]
         public ActionResult CreateColumn(int boardId, string title)
         {
-            var id = EntityRepository.CreateColumn(boardId, title);
+            var id = ColumnRepository.CreateColumn(boardId, title);
 
-            if (id != -1) return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            if (id != null) return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
             else return RedirectToAction("Index", "Board");
         }
 
         [HttpGet]
         public ActionResult DeleteColumn(int id)
         {
-            var boardId = EntityRepository.Columns.SingleOrDefault(c => c.Id == id).BoardId;
+            var column = ColumnRepository.ReadColumn(id);
 
-            EntityRepository.DeleteColumn(id);
+            if (column != null)
+            {
+                var boardId = column.BoardId;
+                ColumnRepository.DeleteColumn(id);
 
-            return RedirectToAction("DisplayBoard", "Board", new {id = boardId});
+                return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            }
+            else return RedirectToAction("Index", "Board");
         }
 
         [HttpPost]
         public ActionResult UpdateColumn(int id, string title)
         {
-            var boardId = EntityRepository.Columns.SingleOrDefault(c => c.Id == id).BoardId;
+            var column = ColumnRepository.ReadColumn(id);
 
-            EntityRepository.UpdateColumn(id, title);
-
-            return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            if (column != null)
+            {
+                var boardId = column.BoardId;
+                ColumnRepository.UpdateColumn(id, title);
+                return RedirectToAction("DisplayBoard", "Board", new { id = boardId });
+            }
+            else return RedirectToAction("Index", "Board");
         }
     }
 }

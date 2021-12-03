@@ -134,7 +134,9 @@
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\EntityRepository.cs" />
+    <Compile Include="Repository\BoardRepository.cs" />
+    <Compile Include="Repository\ColumnRepository.cs" />
+    <Compile Include="Repository\NoteRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />

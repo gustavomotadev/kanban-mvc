@@ -1,7 +1,6 @@
 USE [master]
 GO
 
-/****** Object:  Database [KanbanMVC]    Script Date: 02/12/2021 10:56:56 ******/
 CREATE DATABASE [KanbanMVC]
  CONTAINMENT = NONE
 GO
@@ -138,11 +137,12 @@ CREATE TABLE [dbo].[Column](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Column]  WITH CHECK ADD  CONSTRAINT [FK_Column_Board] FOREIGN KEY([BoardId])
+ALTER TABLE [dbo].[Column]  WITH CHECK ADD  CONSTRAINT [FK_Column_Board_Cascade] FOREIGN KEY([BoardId])
 REFERENCES [dbo].[Board] ([Id])
+ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].[Column] CHECK CONSTRAINT [FK_Column_Board]
+ALTER TABLE [dbo].[Column] CHECK CONSTRAINT [FK_Column_Board_Cascade]
 GO
 
 CREATE TABLE [dbo].[Note](
@@ -157,9 +157,10 @@ CREATE TABLE [dbo].[Note](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Note]  WITH CHECK ADD  CONSTRAINT [FK_Note_Column] FOREIGN KEY([ColumnId])
+ALTER TABLE [dbo].[Note]  WITH CHECK ADD  CONSTRAINT [FK_Note_Column_Cascade] FOREIGN KEY([ColumnId])
 REFERENCES [dbo].[Column] ([Id])
+ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].[Note] CHECK CONSTRAINT [FK_Note_Column]
+ALTER TABLE [dbo].[Note] CHECK CONSTRAINT [FK_Note_Column_Cascade]
 GO

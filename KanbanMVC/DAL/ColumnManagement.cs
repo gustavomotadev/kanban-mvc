@@ -23,7 +23,7 @@ namespace KanbanMVC.DAL
             return (result == null) ? 0 : (int)result;
         }
 
-        public static int DeleteBoard(int id)
+        public static int DeleteColumn(int id)
         {
             string deleteQuery = $"DELETE FROM [dbo].[Column] WHERE Id = {id} SELECT @@ROWCOUNT";
 
@@ -32,7 +32,7 @@ namespace KanbanMVC.DAL
             return (result == null) ? 0 : (int)result;
         }
 
-        public static dynamic ReadBoard(int id)
+        public static dynamic ReadColumn(int id)
         {
             string readQuery = $"SELECT * FROM [dbo].[Column] WHERE Id = {id}";
 
@@ -57,9 +57,35 @@ namespace KanbanMVC.DAL
             return result;
         }
 
-        public static List<dynamic> ReadAllBoards()
+        public static List<dynamic> ReadAllColumns()
         {
             string readQuery = $"SELECT * FROM [dbo].[Column]";
+
+            var dataReader = DataBaseHelper.ExecuteReaderQuery(readQuery);
+
+            var result = new List<dynamic>();
+
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    result.Add(new
+                    {
+                        Id = Convert.ToInt32(dataReader["Id"]),
+                        Title = dataReader["Title"].ToString(),
+                        BoardId = Convert.ToInt32(dataReader["BoardId"])
+                    });
+                }
+            }
+
+            dataReader.Dispose();
+
+            return result;
+        }
+
+        public static List<dynamic> ReadColumnsInBoard(int boardId)
+        {
+            string readQuery = $"SELECT * FROM [dbo].[Column] WHERE BoardId = {boardId}";
 
             var dataReader = DataBaseHelper.ExecuteReaderQuery(readQuery);
 

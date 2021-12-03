@@ -1,7 +1,6 @@
 ﻿.custom-navbar {
     display: flex;
     align-items: center;
-    width: 100vw;
 }
 
 .bg-dark0 {
@@ -136,6 +135,7 @@ h4 {
 
 .note-name, .new-note-title {
     margin-right: 4px;
+    margin: 0 2px 0 2px;
 }
 
 .note-text, .new-note-text {
@@ -144,6 +144,7 @@ h4 {
     text-justify: inter-word;
     margin-bottom: 4px;
     margin-right: 4px;
+    margin: 0 2px 4px 2px;
 }
 
 .black {
@@ -169,4 +170,11 @@ textarea {
 
 input {
     padding: 0.25rem 0.5rem;
+}
+
+.note-text p {
+    display: block;
+    width: 100%;
+    /* TODO: add overflow-wrap: break-word; to all texts and titles */
+    overflow-wrap: break-word;
 }
